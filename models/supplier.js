@@ -9,7 +9,8 @@ const locationSchema = new Schema ({
 
 const meetingSchema = new Schema ({
     date:{type:String},
-    hour:{type:String},
+    comments:{type:String},
+    email:{type:String}
 });
 
 const supplierSchema = new Schema ({

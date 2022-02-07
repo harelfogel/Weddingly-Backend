@@ -6,8 +6,8 @@ module.exports = { customersRouter,suppliersController };
 
 customersRouter.get('/' ,customersController.getCustomers); 
 customersRouter.get('/:id', customersController.getCustomerById);
-customersRouter.post('/meeting' ,customersController.createMeeting);
+customersRouter.post('/appoitments/:cid' ,customersController.createAppoitments);
 customersRouter.post('/couple' ,customersController.addCustomer); 
-
+customersRouter.get('/appoitments/:cid' ,customersController.getCustomerAppoitment);
 
   

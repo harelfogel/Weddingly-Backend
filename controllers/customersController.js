@@ -56,14 +56,33 @@ exports.customersController = {
                 res.status(404).json({message:`Can't add customer!`});
             })
     },
-    createMeeting(req, res) {
-        const customerId = req.body.meetingCustomerId;
+    getCustomerAppoitment(req,res){
+        if(req.params.cid){
+            Customer.find({_id:req.params.cid},{appointment:1})
+            .then(appoitment=>{
+                    if(appoitment){
+                        res.json(appoitment);
+                    }else{
+                        throw 'Cant find meetings';
+                    }
+            })
+            .catch(err=>{
+                res.json({meesage:'Invalid customer id'});
+            })
+        } else{
+            res.status(400).json({message:'Invalid customer id'});
+        }
+       
+
+    },
+    createAppoitments(req, res) {
+        console.log(req.body);
+        const customerId = req.params.cid;
         const newMeeting = {
             meetingSupplierId: req.body.meetingSupplierId,
             meetingSupplierName: splitStringBetweenUppercase(req.body.meetingSupplierName),
-            meetingId: req.body.meetingId,
             meetingDate: req.body.meetingDate,
-            meetingHour: splitStringBetweenLetterP(req.body.meetingHour)
+            meetingSupplierType:req.body.type
         };
         if (newMeeting && customerId) {
             Customer.findOneAndUpdate({
@@ -74,7 +93,7 @@ exports.customersController = {
                         "supplierId": newMeeting.meetingSupplierId,
                         "supplierName": newMeeting.meetingSupplierName,
                         "date": newMeeting.meetingDate,
-                        "hour": newMeeting.meetingHour
+                        "type":newMeeting.meetingSupplierType
                     }
                 }
             }, {

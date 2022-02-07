@@ -1,0 +1,16 @@
+{
+    "brideName": "Shani Lipman",
+    "groomName": "Yoav Levi",
+    "email": "ami@gmai.com",
+    "budget":"31231233 ILS",
+    "appointment":[
+        {
+            "supplierId":"61c1db28957a3047555cc35c",
+            "supplierName":"Ori Carm",
+            "date":"24/12/2021",
+            "hour":"10:00 pm"
+        }
+    ],
+    "password":"12345",
+    "roles":"user"
+}

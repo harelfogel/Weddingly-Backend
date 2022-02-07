@@ -9,9 +9,10 @@ const { userRouter } = require('./routers/authRouter');
 const port = process.env.PORT || 3200;
 const app = express();
 require('./routers/userRouter')(app);
+const originUrl='http://localhost:3000'
 
 const corsOptions = {
-  origin:'http://localhost:8081',
+  origin:`${originUrl}`,
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
