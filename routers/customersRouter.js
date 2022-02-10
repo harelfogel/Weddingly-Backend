@@ -3,7 +3,10 @@ const { customersController } = require('../controllers/customersController');
 const { suppliersController } = require('../controllers/suppliersController');
 const customersRouter = new Router();
 module.exports = { customersRouter,suppliersController };
-
+customersRouter.get('/usersettings', (req, res) => {
+    res.cookie("userData", req.body);
+    res.send('user data added to cookie');
+  });
 customersRouter.get('/' ,customersController.getCustomers); 
 customersRouter.get('/:id', customersController.getCustomerById);
 customersRouter.post('/appoitments/:cid' ,customersController.createAppoitments);

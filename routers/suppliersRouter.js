@@ -4,11 +4,20 @@ const { verifyToken } = require('../middlewares/authJwt');
 const suppliersRouter = new Router();
 module.exports = { suppliersRouter };
 
-suppliersRouter.get('/', suppliersController.getSuppliers);
+// const getUserCookie=(){
+
+// }
+
+suppliersRouter.get('/', (req, res,next) => {
+    res.cookie("userData", req.body);
+    res.send('user data added to cookie');
+    next();
+  });
+suppliersRouter.get('/',verifyToken, suppliersController.getSuppliers);
 suppliersRouter.get('/:id', suppliersController.getSupplierById);
 suppliersRouter.post('/', suppliersController.addSupplier);
 suppliersRouter.post('/:id',suppliersController.createMeeting);
-suppliersRouter.get('/ByType/:Type',suppliersController.getSupplierByType);
-//suppliersRouter.get('/ByType/:Type', verifyToken , suppliersController.getSupplierByType);
+suppliersRouter.get('/ByType/:Type',verifyToken,suppliersController.getSupplierByType);
 suppliersRouter.get('/meetings/:sid', suppliersController.getSupplierMeetings);
   
+ 

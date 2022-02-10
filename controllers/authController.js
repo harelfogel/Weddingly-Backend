@@ -1,25 +1,17 @@
 const config = require("../config/authConfig");
+const { encrypt } = require('../config/crypto');
 const db = require("../models/authModel");
 const User = db.customer;
 const Role = db.role;
-
-
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const fs=require('fs');
 
 exports.authController = {
-  headerFunction(req,res,next){
-      res.header(
-        "Access-Control-Allow-Headers",
-        "x-access-token, Origin, Content-Type, Accept"
-      );
-      next();
-  },
-  signUp(req, res){
+  signUp(req, res) {
     const user = new User({
       brideName: req.body.brideName,
-      groomName:req.body.groomName,
+      groomName: req.body.groomName,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8)
     });
@@ -71,7 +63,6 @@ exports.authController = {
     });
   },
   signIn(req, res) {
-    
     User.findOne({
       brideName: req.body.formInput.brideName
     })
@@ -84,11 +75,13 @@ exports.authController = {
         if (!user) {
           return res.status(404).send({ message: "User Not found." });
         }
+    
         const passwordIsValid = bcrypt.compareSync(
           req.body.formInput.password,
           user.password
         );
-        if (req.body.formInput.password!==user.password) {
+          
+        if((req.body.formInput.password!=user.password)) {
           return res.status(401).send({
             accessToken: null,
             message: "Invalid Password!"
@@ -98,8 +91,23 @@ exports.authController = {
         const token = jwt.sign({ id: user.id }, config.secret, {
           expiresIn: 86400 // 24 hours
         });
+
+        req.headers["x-access-token"]=token;
+        const hash=encrypt(req.headers["x-access-token"]); 
+        fs.writeFile('cookie.json', JSON.stringify(hash),'utf8',function(err) {
+          if(err) {
+            console.log('An error occured while writing to a file');
+          }
+        })
+        // cookie part
+        let options = {
+          path:"/",
+          sameSite:true,
+          maxAge: 1000 * 60 * 60 * 24, // would expire after 24 hours
+          httpOnly: true, // The cookie only accessible by the web server
+      }
+        res.cookie('x_access_token',token, options);
         let authorities = [];
-        console.log('im in 104');
         // for (let i = 0; i < user.roles.length; i++) {
         //   authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
         // }
@@ -113,3 +121,5 @@ exports.authController = {
       });
   }
 }
+
+

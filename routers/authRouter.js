@@ -1,10 +1,20 @@
 const { Router } = require("express");
 const { verifySignUp } = require("../middlewares/authIndex");
-const {authController} = require("../controllers/authController");
+const { authController } = require("../controllers/authController");
 const authRouter = new Router();
 module.exports = { authRouter };
 
-authController.headerFunction;
+
+
+const headerFunction = (req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+}
+
+
 authRouter.post(
   "/signup",
   [
@@ -14,4 +24,4 @@ authRouter.post(
   authController.signUp
 );
 
-authRouter.post("/signin", authController.signIn);
+authRouter.post("/signin",headerFunction, authController.signIn);
