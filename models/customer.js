@@ -5,7 +5,7 @@ const appoitmentSchema = new Schema({
     supplierId: { type: String },
     supplierName: { type: String },
     date: { type: String },
-    hour: { type: String }
+    type:{type:String}
 });
 
 const customerSchema = new Schema({

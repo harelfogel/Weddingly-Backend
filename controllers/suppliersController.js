@@ -38,6 +38,56 @@ exports.suppliersController = {
                     res.json({ message: `Cant find rating of the supplier of ${placeId}` });
                 }
             })
+    },
+    async getSupplierByType(req, res) {
+        try {
+            const suppliersByType = await Supplier.find({ type: req.params.Type });
+            if (suppliersByType.length > 0) {
+                res.status(200).json({ suppliers: suppliersByType });
+            } else {
+                res.status(404).json({ error: "coudln't find suppliers type in the data base" })
+            }
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({ error: "coudln't find suppliers type in the data base" });
+        }
+    },
+    getSupplierMeetings(req, res) {
+        if (req.params.sid) {
+            Supplier.find({ _id: req.params.sid }, { meeting: 1 })
+                .then(meetings => {
+                    if (meetings) {
+                        res.json(meetings);
+                    } else {
+                        throw 'Cant find meetings';
+                    }
+                })
+                .catch(err => {
+                    res.json({ meesage: 'Invalid supplier id' });
+                })
+        } else {
+            res.status(400).json({ message: 'Invalid supplier id' });
+        }
+
+    },
+    addSupplier(req, res) {
+        Supplier.create(req.body)
+            .then((newSupplier) => {
+                res.send(newSupplier);
+            })
+            .catch((err) => {
+                logger.error(err);
+                res.status(404).send(`Can't add Supplier!`);
+            })
+    },
+
+    async createMeeting(req, res) {
+        const newMeeting = await Supplier.findByIdAndUpdate(req.params.id, {
+            $push: { meeting: { ...req.body.meeting } }
+        }, { new: true }
+        )
+        console.log(newMeeting);
+        res.status(200).send(newMeeting);
     }
 };
 

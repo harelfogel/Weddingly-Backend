@@ -2,27 +2,22 @@ const db = require("../models/authModel");
 const ROLES = db.ROLES;
 const Customer = db.customer;
 
-
-
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   Customer.findOne({
     brideName: req.body.brideName
   }).exec((err, user) => {
+    console.log(user);
     if (err) {
       res.status(500).json({ message: err });
       return;
     }
-
-    if (user) {
-      res.status(400).json({ message: "Failed! Username is already in use!" });
-      return;
-    }
-
+    
     // Email
     Customer.findOne({
       email: req.body.email
     }).exec((err, user) => {
+      console.log(user);
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -32,7 +27,6 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
         res.status(400).json({ message: "Failed! Email is already in use!" });
         return;
       }
-
       next();
     });
   });

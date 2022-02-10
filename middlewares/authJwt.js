@@ -1,12 +1,29 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig.js");
 const db = require("../models/authModel");
+const { decrypt } = require('../config/crypto');
 const Customer = db.customer;
 const Role = db.role;
+const fs = require('fs');
 
-verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+ const readToken=filepath=>{
+   return new Promise((resolve,reject)=> {
+    fs.readFile(filepath, "utf8", (err, encryptToken) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+     
+     const encrcypToken=decrypt(JSON.parse(encryptToken));
+     console.log(encrcypToken);
+     resolve(encrcypToken);
+    });
+   });
+ } 
 
+  
+  verifyToken  = async (req, res, next) => {
+  token= await readToken("./cookie.json");  
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }

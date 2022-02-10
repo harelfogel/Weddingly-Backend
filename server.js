@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const { customersRouter } = require("./routers/customersRouter");
 const { suppliersRouter } = require("./routers/suppliersRouter");
@@ -8,15 +9,16 @@ const { authRouter } = require('./routers/authRouter');
 const { userRouter } = require('./routers/authRouter');
 const port = process.env.PORT || 3200;
 const app = express();
-require('./routers/userRouter')(app);
+const originUrl='http://localhost:3000'
 
 const corsOptions = {
-  origin:'http://localhost:8081',
+  origin:`${originUrl}`,
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
