@@ -63,6 +63,7 @@ exports.authController = {
     });
   },
   signIn(req, res) {
+    console.log('sign in:::')
     User.findOne({
       brideName: req.body.formInput.brideName
     })

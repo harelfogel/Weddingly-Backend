@@ -22,6 +22,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+console.log('sadsaas');
 
 // simple route
 app.get("/", (req, res) => {
