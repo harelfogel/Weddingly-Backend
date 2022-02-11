@@ -7,6 +7,7 @@ module.exports = { authRouter };
 
 
 const headerFunction = (req, res, next) => {
+  console.log('header functon');
   res.header(
     "Access-Control-Allow-Headers",
     "x-access-token, Origin, Content-Type, Accept"
