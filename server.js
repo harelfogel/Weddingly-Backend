@@ -11,18 +11,18 @@ const port = process.env.PORT || 3200;
 const app = express();
 const originUrl='http://localhost:3000'
 
+app.use(cookieParser());
 const corsOptions = {
-  origin:`${originUrl}`,
+origin:[/^http:.*/],
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
-app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-console.log('sadsaas');
+
 
 // simple route
 app.get("/", (req, res) => {

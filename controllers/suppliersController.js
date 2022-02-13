@@ -73,20 +73,24 @@ exports.suppliersController = {
     addSupplier(req, res) {
         Supplier.create(req.body)
             .then((newSupplier) => {
-                res.send(newSupplier);
+                if(!newSupplier){
+                    throw `Can't add Supplier!`;
+                }
+                else{
+                    res.json(newSupplier);
+                }
             })
             .catch((err) => {
-                logger.error(err);
-                res.status(404).send(`Can't add Supplier!`);
+                res.status(404).json({message:err});
             })
     },
 
     async createMeeting(req, res) {
+        
         const newMeeting = await Supplier.findByIdAndUpdate(req.params.id, {
             $push: { meeting: { ...req.body.meeting } }
         }, { new: true }
         )
-        console.log(newMeeting);
         res.status(200).send(newMeeting);
     }
 };

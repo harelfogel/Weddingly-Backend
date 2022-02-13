@@ -6,6 +6,6 @@ db.mongoose = mongoose;
 db.customer = require("./customer");
 db.role = require("./roleModel");
 
-db.ROLES = ["customer", "admin", "moderator"];
+db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;
