@@ -1,29 +1,27 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig.js");
 const db = require("../models/authModel");
-const { decrypt } = require('../config/crypto');
 const Customer = db.customer;
 const Role = db.role;
-const fs = require('fs');
 
- const readToken=filepath=>{
-   return new Promise((resolve,reject)=> {
-    fs.readFile(filepath, "utf8", (err, encryptToken) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+
+//  const readToken=filepath=>{b
+//    return new Promise((resolve,reject)=> {
+//     fs.readFile(filepath, "utf8", (err, encryptToken) => {
+//       if (err) {
+//         reject(err);
+//         return;
+//       }
      
-     const encrcypToken=decrypt(JSON.parse(encryptToken));
-     console.log(encrcypToken);
-     resolve(encrcypToken);
-    });
-   });
- } 
-
-  
+//      const encrcypToken=decrypt(JSON.parse(encryptToken));
+//      resolve(encrcypToken);
+//     });
+//    });
+//  } 
   verifyToken  = async (req, res, next) => {
-  token= await readToken("./cookie.json");  
+  const token=req.cookies.user_token; 
+  console.log('token fucker:::::');
+  console.log(req.cookies.user_token);
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }

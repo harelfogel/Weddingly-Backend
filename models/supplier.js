@@ -9,7 +9,7 @@ const locationSchema = new Schema ({
 
 const meetingSchema = new Schema ({
     date:{type:String},
-    comments:{type:String},
+    comment:{type:String},
     email:{type:String}
 });
 
@@ -25,7 +25,14 @@ const supplierSchema = new Schema ({
     meeting:[meetingSchema],
     photo:{type:String},
     rating:{type:Number},
-    user_ratings_total:{type:Number}
+    user_ratings_total:{type:Number},
+    password: { type: String, default: '' },
+    roles: [
+        {
+            type:Schema.Types.ObjectId,
+            ref: "Role"
+        }
+    ]
 } , {collection:'suppliers',strict:false}); // can be done versionKey: false but its not recommended therfore i didnt use it
 
 

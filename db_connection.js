@@ -1,9 +1,7 @@
 const mongoose = require('mongoose' );
 const consts = require('./constants' );
 const { DB_HOST, DB_USER, DB_PASS } = consts;
-console.log(DB_USER)
 const url = DB_HOST;
-
 
 const options = {
  useNewUrlParser: true, // For deprecation warnings

@@ -21,6 +21,7 @@ exports.ratingController = {
                         }
                     }
                     catch (error) {
+                        
                         res.json({ message: `Cant find rating of the supplier of ${placeId}` });
                     }
                 })
