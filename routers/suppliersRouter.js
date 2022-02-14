@@ -16,5 +16,5 @@ suppliersRouter.post('/', suppliersController.addSupplier);
 suppliersRouter.post('/:id',suppliersController.createMeeting);
 suppliersRouter.get('/ByType/:Type',suppliersController.getSupplierByType);
 suppliersRouter.get('/meetings/:sid', suppliersController.getSupplierMeetings);
-  
+suppliersRouter.put('/:id', suppliersController.updateSupplier);  
  

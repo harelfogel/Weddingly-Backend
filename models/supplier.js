@@ -15,6 +15,7 @@ const meetingSchema = new Schema ({
 
 const supplierSchema = new Schema ({
     _id:{type: Schema.Types.ObjectId,auto:true},   // gives a unique id
+    approved:{type:Boolean,default:false},
     placeId:{type:String},
     name:{type:String},
     email:{type:String},
