@@ -8,22 +8,33 @@ const appoitmentSchema = new Schema({
     type:{type:String}
 });
 
-const customerSchema = new Schema({
-    _id: { type: Schema.Types.ObjectId, auto: true },   // gives a unique id
+
+const meetingSchema = new Schema ({
+    date:{type:String},
+    comment:{type:String},
+    email:{type:String}
+});
+
+const UserSchema = new Schema({
     brideName: { type: String },
     groomName: { type: String },
     email: { type: String },
     budget: { type: String },
     password: { type: String, default: '' },
-    roles: [
-        {
-            type:Schema.Types.ObjectId,
-            ref: "Role"
-        }
-    ],
+    role: {type:String},
+    placeId:{type:String},
+    fullName:{type:String},
+    type:{type:String},   
+    price: {type: String},
+    phone:{type:String},
+    location:{type:String },
+    meeting:[meetingSchema],
+    photo:{type:String},
+    rating:{type:Number},
+    user_ratings_total:{type:Number},
     appointment: [appoitmentSchema]
-}, { collection: 'customers', strict: false }); // can be done versionKey: false but its not recommended therfore i didnt use it
+}, { collection: 'Users', strict: false }); 
 
-const Customer = model('Customer', customerSchema);
+const UserModel = model('User', UserSchema);
 
-module.exports = Customer;
+module.exports = UserModel;

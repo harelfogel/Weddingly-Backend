@@ -24,6 +24,7 @@ function splitStringBetweenLetterP(stringValue) {
     }
 
 }
+
 exports.customersController = {
 
     getCustomerById(req, res) {
@@ -47,7 +48,6 @@ exports.customersController = {
             })
     },
     addCustomer(req, res) {
-        console.log(req.body);
         Customer.create(req.body)
             .then((newCustomer) => {
                 res.json(newCustomer);
@@ -76,7 +76,6 @@ exports.customersController = {
 
     },
     createAppoitments(req, res) {
-        console.log(req.body);
         const customerId = req.params.cid;
         const newMeeting = {
             meetingSupplierId: req.body.meetingSupplierId,

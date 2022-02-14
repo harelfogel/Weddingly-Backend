@@ -53,6 +53,7 @@ exports.suppliersController = {
         }
     },
     getSupplierMeetings(req, res) {
+        console.log(req.body);
         if (req.params.sid) {
             Supplier.find({ _id: req.params.sid }, { meeting: 1 })
                 .then(meetings => {
@@ -86,7 +87,6 @@ exports.suppliersController = {
     },
 
     async createMeeting(req, res) {
-        
         const newMeeting = await Supplier.findByIdAndUpdate(req.params.id, {
             $push: { meeting: { ...req.body.meeting } }
         }, { new: true }

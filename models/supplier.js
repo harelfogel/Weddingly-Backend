@@ -27,12 +27,7 @@ const supplierSchema = new Schema ({
     rating:{type:Number},
     user_ratings_total:{type:Number},
     password: { type: String, default: '' },
-    roles: [
-        {
-            type:Schema.Types.ObjectId,
-            ref: "Role"
-        }
-    ]
+    roles:{type:String,default:'moderator'}
 } , {collection:'suppliers',strict:false}); // can be done versionKey: false but its not recommended therfore i didnt use it
 
 
