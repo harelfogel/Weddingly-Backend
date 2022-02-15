@@ -53,7 +53,6 @@ exports.suppliersController = {
         }
     },
     getSupplierMeetings(req, res) {
-        console.log(req.body);
         if (req.params.sid) {
             Supplier.find({ _id: req.params.sid }, { meeting: 1 })
                 .then(meetings => {
@@ -74,24 +73,93 @@ exports.suppliersController = {
     addSupplier(req, res) {
         Supplier.create(req.body)
             .then((newSupplier) => {
-                if(!newSupplier){
+                if (!newSupplier) {
                     throw `Can't add Supplier!`;
                 }
-                else{
+                else {
                     res.json(newSupplier);
                 }
             })
             .catch((err) => {
-                res.status(404).json({message:err});
+                res.status(404).json({ message: err });
             })
     },
 
     async createMeeting(req, res) {
-        const newMeeting = await Supplier.findByIdAndUpdate(req.params.id, {
-            $push: { meeting: { ...req.body.meeting } }
-        }, { new: true }
-        )
-        res.status(200).send(newMeeting);
+        try {
+            const newMeeting = await Supplier.findByIdAndUpdate(req.params.id, {
+                $push: { meeting: { ...req.body.meeting } }
+            }, { new: true }
+            )
+            res.status(200).send(newMeeting);
+        } catch (e) {
+            res.status(400).send(e);
+        }
+    },
+    async updateMeeting(req, res) {
+        try {
+            await Supplier.findById(req.params.sid, function (err, supplier) {
+                try {
+                    if (!err) {
+                        if (!supplier) {
+                            res.status(404).json({ message: 'supplier Not Found!' });
+                        } else {
+                            supplier.meeting.id(req.params.mid).approved = req.body.approved;
+                            supplier.save(function (saveerr, saveMeeting) {
+                                if (!saveerr) {
+                                    res.status(200).send(saveMeeting);
+                                } else {
+                                    res.status(400).json(saveerr.message);
+                                }
+                            });
+                        }
+                    } else {
+                        res.status(400).json(err.message);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+
+            })
+        } catch (e) {
+            console.log(e);
+        }
+
+    },
+    async deleteMeeting(req, res) {
+        try {
+            await Supplier.findById(req.params.sid, function (err, supplier) {
+                try {
+                    if (!err) {
+                        if (!supplier) {
+                            res.status(404).send('supplier Not Found!');
+                        } else {
+                             supplier.meeting.id(req.params.mid).remove(function (removerr, removedMeeting) {
+                                if (removerr) {
+                                    res.status(400).json({ meesage: `Error! Cant remove Meeting` });
+                                } 
+                            });
+                            supplier.markModified('meeting'); 
+                            supplier.save(function(saverr,savedeletedMeeting){
+                                if(!saverr){
+                                    res.status(200).send(savedeletedMeeting);
+                                } else{
+                                    res.status(400).send(saverr.message);
+                                }
+                            })
+                        }
+                    } else {
+                        res.status(400).send(err.message);
+
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            })
+
+        } catch (e) {
+            console.log(e);
+        }
     }
 };
 
