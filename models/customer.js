@@ -22,16 +22,7 @@ const UserSchema = new Schema({
     budget: { type: String },
     password: { type: String, default: '' },
     role: {type:String},
-    placeId:{type:String},
-    fullName:{type:String},
-    type:{type:String},   
-    price: {type: String},
     phone:{type:String},
-    location:{type:String },
-    meeting:[meetingSchema],
-    photo:{type:String},
-    rating:{type:Number},
-    user_ratings_total:{type:Number},
     appointment: [appoitmentSchema]
 }, { collection: 'Users', strict: false }); 
 
