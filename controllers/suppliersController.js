@@ -4,6 +4,18 @@ const { API_KEY } = require('../constants');
 const utils = require('./../utils');
 
 exports.suppliersController = {
+    updateSupplier(req,res){
+        Supplier.findOneAndUpdate({_id:req.params.id},req.body,{new:true})
+        .then((result) => {
+            if (result) {
+                res.json(result);
+            }
+        })
+        .catch((err) => {
+            res.status(404).json({ message: `Can't update supplier!` });
+        })
+
+    },
     getSupplierById(req, res) {
         Supplier.findById(req.params.id)
             .then((result) => {
@@ -42,9 +54,9 @@ exports.suppliersController = {
     },
     async getSupplierByType(req, res) {
         try {
-            const suppliersByType = await Supplier.find({ type: req.params.Type });
+            const suppliersByType = await Supplier.find({ type:{$regex:req.params.Type,$options:"i"} });
             if (suppliersByType.length > 0) {
-                res.status(200).json({ suppliers: suppliersByType });
+                res.status(200).json({ suppliers:suppliersByType});
             } else {
                 res.status(404).json({ error: "coudln't find suppliers type in the data base" })
             }
