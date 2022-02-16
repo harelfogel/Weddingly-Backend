@@ -15,9 +15,9 @@ exports.authController = {
       res.status(200).json(userData);
     } else {
       const supplierData = await Supplier.findById(req.userId);
-      if(supplierData){
+      if (supplierData) {
         res.status(200).json(supplierData);
-      } else{
+      } else {
         res.status(404).json({ message: `Invalid User!` });
       }
     }
@@ -72,10 +72,8 @@ exports.authController = {
 
         // cookie part
         let options = {
-          path: "/",
-          sameSite: true,
           expires: new Date(Date.now() + 9000000),
-          httpOnly: false, // The cookie only accessible by the web server
+          httpOnly: true, // The cookie only accessible by the web server
         }
         res.cookie('user_token', token, options);
         res.status(200).json({
@@ -83,8 +81,8 @@ exports.authController = {
           password: undefined,
           accessToken: token
         });
-      }else if(!foundUser) {
-        const foundSupplier = await Supplier.findOne({email: req.body.Email });
+      } else if (!foundUser) {
+        const foundSupplier = await Supplier.findOne({ email: req.body.Email });
         if (foundSupplier) {
           console.log(foundSupplier.password);
           const passwordIsValid_ = bcrypt.compareSync(
@@ -100,13 +98,11 @@ exports.authController = {
           const token = jwt.sign({ id: foundSupplier._id }, config.secret, {
             expiresIn: 86400 // 24 hours
           });
-        
+
           // cookie part
           let options = {
-            path: "/",
-            sameSite: true,
             expires: new Date(Date.now() + 9000000),
-            httpOnly: false, // The cookie only accessible by the web server
+            httpOnly: true, // The cookie only accessible by the web server
           }
           res.cookie('user_token', token, options);
           res.status(200).json({
@@ -116,6 +112,7 @@ exports.authController = {
           });
         } else {
           res.status(404).send({ message: "User Not found." });
+
         }
       }
     } catch (e) {
@@ -123,9 +120,9 @@ exports.authController = {
       res.status(500).send(e)
     }
   },
-  async Logout(res, req) {
-    res.clearCookie("user_token");
-    res.status(200).send("deleted user session");
+  async Logout(req,res) {
+    console.log('log out----------------------------------------------------');
+    res.clearCookie("user_token").send('cleared cookie');
   }
 }
 
