@@ -1,6 +1,7 @@
 const Supplier = require('../models/supplier');
 const axios = require('axios');
 const { API_KEY } = require('../constants');
+const utils = require('./../utils');
 
 exports.suppliersController = {
     getSupplierById(req, res) {
@@ -48,7 +49,7 @@ exports.suppliersController = {
                 res.status(404).json({ error: "coudln't find suppliers type in the data base" })
             }
         } catch (e) {
-            console.log(e);
+            utils.fileLogger.write(e);
             res.status(400).json({ error: "coudln't find suppliers type in the data base" });
         }
     },
@@ -117,12 +118,12 @@ exports.suppliersController = {
                         res.status(400).json(err.message);
                     }
                 } catch (e) {
-                    console.log(e);
+                    utils.fileLogger.write(e);
                 }
 
             })
         } catch (e) {
-            console.log(e);
+            utils.fileLogger.write(e);
         }
 
     },
@@ -153,12 +154,12 @@ exports.suppliersController = {
 
                     }
                 } catch (e) {
-                    console.log(e);
+                    utils.fileLogger.write(e);
                 }
             })
 
         } catch (e) {
-            console.log(e);
+            utils.fileLogger.write(e);
         }
     }
 };

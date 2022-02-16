@@ -16,4 +16,4 @@ authRouter.post(
 
 authRouter.post("/signin", authController.signIn);
 
-authRouter.get("/logout", authController.Logout);
+authRouter.post("/logout", authController.Logout);
