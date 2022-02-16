@@ -48,7 +48,6 @@ exports.authController = {
       const newUser = await user.save();
       res.status(200).send(newUser)
     } catch (e) {
-      console.log(e);
       res.status(500).send({ message: e });
     }
   },
@@ -84,7 +83,6 @@ exports.authController = {
       } else if (!foundUser) {
         const foundSupplier = await Supplier.findOne({ email: req.body.Email });
         if (foundSupplier) {
-          console.log(foundSupplier.password);
           const passwordIsValid_ = bcrypt.compareSync(
             req.body.Password,
             foundSupplier.password
@@ -116,12 +114,10 @@ exports.authController = {
         }
       }
     } catch (e) {
-      console.log(e)
-      res.status(500).send(e)
+      res.status(500).send(e);
     }
   },
   async Logout(req,res) {
-    console.log('log out----------------------------------------------------');
     res.clearCookie("user_token").send('cleared cookie');
   }
 }

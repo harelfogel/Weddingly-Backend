@@ -12,5 +12,7 @@ customersRouter.get('/:id', customersController.getCustomerById);
 customersRouter.post('/appoitments/:cid' ,customersController.createAppoitments);
 customersRouter.post('/couple' ,customersController.addCustomer); 
 customersRouter.get('/appoitments/:cid' ,customersController.getCustomerAppoitment);
+customersRouter.put('/appoitments/:cid/:mid', customersController.updateAppoitment);
+customersRouter.put('/removeAppoitments/:cid/:mid', customersController.deleteAppoitment);
 
   

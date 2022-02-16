@@ -4,24 +4,8 @@ const db = require("../models/authModel");
 const Customer = db.customer;
 const Role = db.role;
 
-
-//  const readToken=filepath=>{b
-//    return new Promise((resolve,reject)=> {
-//     fs.readFile(filepath, "utf8", (err, encryptToken) => {
-//       if (err) {
-//         reject(err);
-//         return;
-//       }
-     
-//      const encrcypToken=decrypt(JSON.parse(encryptToken));
-//      resolve(encrcypToken);
-//     });
-//    });
-//  } 
   verifyToken  = async (req, res, next) => {
   const token=req.cookies.user_token; 
-  console.log(req.cookies.user_token);
-  console.log(req.cookies.user_token);
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }

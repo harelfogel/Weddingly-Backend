@@ -1,6 +1,7 @@
 
 const Customer = require('../models/customer');
-
+const UserModel=require('../models/customer');
+const utils = require('./../utils');
 function splitStringBetweenUppercase(stringValue) {
     if (stringValue) {
         let newString = stringValue.split(/(?=[A-Z])/);
@@ -84,7 +85,7 @@ exports.customersController = {
             meetingSupplierType:req.body.type
         };
         if (newMeeting && customerId) {
-            Customer.findOneAndUpdate({
+            UserModel.findOneAndUpdate({
                 _id: customerId
             }, {
                 $push: {
@@ -92,7 +93,8 @@ exports.customersController = {
                         "supplierId": newMeeting.meetingSupplierId,
                         "supplierName": newMeeting.meetingSupplierName,
                         "date": newMeeting.meetingDate,
-                        "type":newMeeting.meetingSupplierType
+                        "type":newMeeting.meetingSupplierType,
+                        "approved":false
                     }
                 }
             }, {
@@ -104,6 +106,71 @@ exports.customersController = {
                 })
         } else {
             res.json({ message: `Cant add new meeting to customer` });
+        }
+    },
+    async updateAppoitment(req, res) {
+        try {
+            await UserModel.findById(req.params.cid, function (err, user) {
+                try {
+                    if (!err) {
+                        if (!user) {
+                            res.status(404).json({ message: 'user Not Found!' });
+                        } else {
+                            user.appoitment.id(req.params.mid).approved = req.body.approved;
+                            user.save(function (saveerr, saveMeeting) {
+                                if (!saveerr) {
+                                    res.status(200).send(saveMeeting);
+                                } else {
+                                    res.status(400).json(saveerr.message);
+                                }
+                            });
+                        }
+                    } else {
+                        res.status(400).json(err.message);
+                    }
+                } catch (e) {
+                    utils.fileLogger.write(e);
+                }
+
+            })
+        } catch (e) {
+            utils.fileLogger.write(e);
+        }
+
+    },
+    async deleteAppoitment(req, res) {
+        try {
+            await UserModel.findById(req.params.cid, function (err, user) {
+                try {
+                    if (!err) {
+                        if (!user) {
+                            res.status(404).send('user is Not Found!');
+                        } else {
+                             user.appoitment.id(req.params.mid).remove(function (removerr, removedAppoitment) {
+                                if (removerr) {
+                                    res.status(400).json({ meesage: `Error! Cant remove Meeting` });
+                                } 
+                            });
+                            user.markModified('appoitment'); 
+                            user.save(function(saverr,savedeletedAppoitment){
+                                if(!saverr){
+                                    res.status(200).send(savedeletedAppoitment);
+                                } else{
+                                    res.status(400).send(saverr.message);
+                                }
+                            })
+                        }
+                    } else {
+                        res.status(400).send(err.message);
+
+                    }
+                } catch (e) {
+                    utils.fileLogger.write(e);
+                }
+            })
+
+        } catch (e) {
+            utils.fileLogger.write(e);
         }
     }
 };

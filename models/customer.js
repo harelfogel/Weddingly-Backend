@@ -5,7 +5,8 @@ const appoitmentSchema = new Schema({
     supplierId: { type: String },
     supplierName: { type: String },
     date: { type: String },
-    type:{type:String}
+    type:{type:String},
+    approved:{type:Boolean,default:false}
 });
 
 

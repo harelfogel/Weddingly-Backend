@@ -7,7 +7,6 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   Customer.findOne({
     brideName: req.body.brideName
   }).exec((err, user) => {
-    console.log(user);
     if (err) {
       res.status(500).json({ message: err });
       return;
@@ -17,7 +16,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     Customer.findOne({
       email: req.body.email
     }).exec((err, user) => {
-      console.log(user);
+
       if (err) {
         res.status(500).send({ message: err });
         return;

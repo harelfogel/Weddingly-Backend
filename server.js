@@ -7,6 +7,7 @@ const { suppliersRouter } = require("./routers/suppliersRouter");
 const { ratingsRouter } = require("./routers/ratingsRouter");
 const { authRouter } = require('./routers/authRouter');
 const { userRouter } = require('./routers/authRouter');
+const logger = require("./logger/logger");
 const port = process.env.PORT || 3200;
 const app = express();
 const originUrl='http://localhost:3000';
@@ -37,6 +38,7 @@ app.use('/weddingly/suppliers', suppliersRouter);
 app.use('/weddingly/ratings', ratingsRouter);
 
 app.use((req, res) => {
+  logger.error('Something is broken!');
   res.status(400).send('Something is broken!');
 });
 
