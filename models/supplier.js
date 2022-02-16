@@ -7,6 +7,7 @@ const locationSchema = new Schema ({
     address:{type:String}
 });
 
+
 const meetingSchema = new Schema ({
     date:{type:String},
     comment:{type:String},

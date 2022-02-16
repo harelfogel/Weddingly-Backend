@@ -20,8 +20,6 @@ const Role = db.role;
 //  } 
   verifyToken  = async (req, res, next) => {
   const token=req.cookies.user_token; 
-  console.log(req.cookies.user_token);
-  console.log(req.cookies.user_token);
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }

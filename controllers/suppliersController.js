@@ -120,7 +120,7 @@ exports.suppliersController = {
                             supplier.meeting.id(req.params.mid).approved = req.body.approved;
                             supplier.save(function (saveerr, saveMeeting) {
                                 if (!saveerr) {
-                                    res.status(200).send(saveMeeting);
+                                    res.status(200).json(saveMeeting);
                                 } else {
                                     res.status(400).json(saveerr.message);
                                 }
@@ -130,12 +130,13 @@ exports.suppliersController = {
                         res.status(400).json(err.message);
                     }
                 } catch (e) {
-                    utils.fileLogger.write(e);
+                    console.log(e)
+                    
                 }
 
             })
         } catch (e) {
-            utils.fileLogger.write(e);
+            console.log(e)
         }
 
     },
