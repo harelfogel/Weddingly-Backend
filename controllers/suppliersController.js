@@ -114,6 +114,7 @@ exports.suppliersController = {
             await Supplier.findById(req.params.sid, function (err, supplier) {
                 try {
                     if (!err) {
+                        
                         if (!supplier) {
                             res.status(404).json({ message: 'supplier Not Found!' });
                         } else {
@@ -138,6 +139,20 @@ exports.suppliersController = {
             utils.fileLogger.write(e);
         }
 
+    },
+    async updateMettingWithAppointmentId(req, res) {
+        try{
+            const supplierId = req.params.sid
+            const meetingId = req.params.mid
+            const appointemntId = req.params.aid
+            const updatedSup = await Supplier.findOneAndUpdate({_id: supplierId,meeting : {$elemMatch: {_id: meetingId}}},{
+                $set:{'meeting.$.appointemntId': appointemntId}
+            },{new: true})
+            res.send(updatedSup)
+        }catch(e){
+            console.log(e)
+            res.status(500).send("error")
+        }
     },
     async deleteMeeting(req, res) {
         try {
