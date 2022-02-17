@@ -12,7 +12,9 @@ const meetingSchema = new Schema ({
     comment:{type:String},
     email:{type:String},
     name:{type:String},
-    approved:{type:Boolean,default:false}
+    clientId:{type:String},
+    approved:{type:Boolean,default:false},
+    appointemntId:{type:String}
 });
 
 const supplierSchema = new Schema ({

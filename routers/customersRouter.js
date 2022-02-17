@@ -12,5 +12,6 @@ customersRouter.get('/:id', customersController.getCustomerById);
 customersRouter.post('/appoitments/:cid' ,customersController.createAppoitments);
 customersRouter.post('/couple' ,customersController.addCustomer); 
 customersRouter.get('/appoitments/:cid' ,customersController.getCustomerAppoitment);
+customersRouter.put('/appoitmentsAdaptation/:cid/:mid/:updtid', customersController.updateAppoitmentIdToSupplierMeeting);
+customersRouter.put('/appoitmentsApproved/:cid/:mid', customersController.updateAprrovedAppoitment);
 
-  

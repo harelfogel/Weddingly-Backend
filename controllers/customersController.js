@@ -1,5 +1,7 @@
 
 const Customer = require('../models/customer');
+const UserModel = require('../models/customer');
+const utils = require('./../utils');
 
 function splitStringBetweenUppercase(stringValue) {
     if (stringValue) {
@@ -10,16 +12,6 @@ function splitStringBetweenUppercase(stringValue) {
         });
         return returnedString;
     } else {
-        return null;
-    }
-
-}
-
-function splitStringBetweenLetterP(stringValue) {
-    if (stringValue) {
-        let newString = stringValue.split("p")[0];
-        return (newString + " " + "pm");
-    } else{
         return null;
     }
 
@@ -44,7 +36,7 @@ exports.customersController = {
                 res.json(result);
             })
             .catch((err) => {
-                res.status(404).json({message:`Can't find Customers!`});
+                res.status(404).json({ message: `Can't find Customers!` });
             })
     },
     addCustomer(req, res) {
@@ -53,76 +45,124 @@ exports.customersController = {
                 res.json(newCustomer);
             })
             .catch((err) => {
-                res.status(404).json({message:`Can't add customer!`});
+                res.status(404).json({ message: `Can't add customer!` });
             })
     },
-    getCustomerAppoitment(req,res){
-        if(req.params.cid){
-            Customer.find({_id:req.params.cid},{appointment:1})
-            .then(appoitment=>{
-                    if(appoitment){
+    getCustomerAppoitment(req, res) {
+        console.log(req.params.cid)
+        if (req.params.cid) {
+            UserModel.findById(req.params.cid).select({ appointment: 1 })
+                .then(appoitment => {
+                    if (appoitment) {
                         res.json(appoitment);
-                    }else{
+                    } else {
                         throw 'Cant find meetings';
                     }
-            })
-            .catch(err=>{
-                res.json({meesage:'Invalid customer id'});
-            })
-        } else{
-            res.status(400).json({message:'Invalid customer id'});
-        }
-       
-
-    },
-    createAppoitments(req, res) {
-        const customerId = req.params.cid;
-        const newMeeting = {
-            meetingSupplierId: req.body.meetingSupplierId,
-            meetingSupplierName: splitStringBetweenUppercase(req.body.meetingSupplierName),
-            meetingDate: req.body.meetingDate,
-            meetingSupplierType:req.body.type
-        };
-        if (newMeeting && customerId) {
-            Customer.findOneAndUpdate({
-                _id: customerId
-            }, {
-                $push: {
-                    appointment: {
-                        "supplierId": newMeeting.meetingSupplierId,
-                        "supplierName": newMeeting.meetingSupplierName,
-                        "date": newMeeting.meetingDate,
-                        "type":newMeeting.meetingSupplierType
-                    }
-                }
-            }, {
-                new: true,
-                upsert: true
-            })
-                .exec(() => {
-                    res.status(200).json(req.body);
+                })
+                .catch(err => {
+                    res.json({ meesage: 'Invalid customer id' });
                 })
         } else {
-            res.json({ message: `Cant add new meeting to customer` });
+            res.status(400).json({ message: 'Invalid customer id' });
         }
+
+
+    },
+    async createAppoitments(req, res) {
+        try {
+            const customerId = req.params.cid;
+            const newMeeting = {
+                meetingSupplierId: req.body.meetingSupplierId,
+                meetingSupplierName: splitStringBetweenUppercase(req.body.meetingSupplierName),
+                meetingDate: req.body.meetingDate,
+                meetingSupplierType: req.body.type,
+                supplierMeetingId: req.body.supplierMeetingId
+            };
+            if (newMeeting && customerId) {
+                const newUserUpdate = await UserModel.findOneAndUpdate({
+                    _id: customerId
+                }, {
+                    $push: {
+                        appointment: {
+                            "supplierId": newMeeting.meetingSupplierId,
+                            "supplierName": newMeeting.meetingSupplierName,
+                            "date": newMeeting.meetingDate,
+                            "type": newMeeting.meetingSupplierType,
+                            "supplierMeetingId": newMeeting.supplierMeetingId
+                        }
+                    }
+                }, {
+                    new: true,
+                })
+                res.status(200).json(newUserUpdate);
+            } else {
+                res.json({ message: `Cant add new meeting to customer` });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    },
+    async updateAppoitmentIdToSupplierMeeting(req, res) {
+        try {
+            await UserModel.findById(req.params.cid, function (err, user) {
+                try {
+                    if (!err) {
+                        if (!user) {
+                            res.status(404).json({ message: 'user Not Found!' });
+                        } else {
+                            user.appointment.id(req.params.mid)._id = req.params.updtid;
+                            user.save(function (saveerr, saveMeeting) {
+                                if (!saveerr) {
+                                    res.status(200).send(saveMeeting);
+                                } else {
+                                    res.status(400).json(saveerr.message);
+                                }
+                            });
+                        }
+                    } else {
+                        res.status(400).json(err.message);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+
+            })
+        } catch (e) {
+            console.log(e);
+        }
+
+    },
+    async updateAprrovedAppoitment(req, res) {
+        try {
+            const clientId = req.params.cid
+            const appointmentId = req.params.mid
+            const findClient = await UserModel.findOneAndUpdate({ _id: clientId, appointment: { $elemMatch: { _id: appointmentId } } }, {
+                $set: { 'appointment.$.approved': true }
+            }, { new: true })
+            res.send("ok")
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 };
 
 exports.allAccess = (req, res) => {
     res.status(200).send("Public Content.");
-  };
-  
-  exports.userBoard = (req, res) => {
+};
+
+exports.userBoard = (req, res) => {
     res.status(200).send("User Content.");
-  };
-  
-  exports.adminBoard = (req, res) => {
+};
+
+exports.adminBoard = (req, res) => {
     res.status(200).send("Admin Content.");
-  };
-  
-  exports.moderatorBoard = (req, res) => {
+};
+
+exports.moderatorBoard = (req, res) => {
     res.status(200).send("Moderator Content.");
-  };
+};
 
 
 
