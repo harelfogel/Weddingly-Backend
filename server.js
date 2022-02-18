@@ -9,7 +9,7 @@ const { authRouter } = require('./routers/authRouter');
 const { userRouter } = require('./routers/authRouter');
 const port = process.env.PORT || 3200;
 const app = express();
-const originUrl='http://localhost:3000';
+const originUrl='https://weddinglysystem.netlify.app';
 
 app.use(cookieParser());
 const corsOptions = {
