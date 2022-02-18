@@ -13,7 +13,7 @@ const originUrl='https://weddinglysystem.netlify.app';
 
 app.use(cookieParser());
 const corsOptions = {
-origin:[/^http:.*/],
+origin:originUrl,
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
