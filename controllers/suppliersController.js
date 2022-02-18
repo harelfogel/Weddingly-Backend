@@ -61,7 +61,7 @@ exports.suppliersController = {
                 res.status(404).json({ error: "coudln't find suppliers type in the data base" })
             }
         } catch (e) {
-            utils.fileLogger.write(e);
+            console.log(e);
             res.status(400).json({ error: "coudln't find suppliers type in the data base" });
         }
     },
@@ -131,12 +131,12 @@ exports.suppliersController = {
                         res.status(400).json(err.message);
                     }
                 } catch (e) {
-                    utils.fileLogger.write(e);
+                    console.log(e);
                 }
 
             })
         } catch (e) {
-            utils.fileLogger.write(e);
+            console.log(e);
         }
 
     },
@@ -181,12 +181,13 @@ exports.suppliersController = {
 
                     }
                 } catch (e) {
-                    utils.fileLogger.write(e);
+                    console.log(e);
                 }
             })
 
         } catch (e) {
-            utils.fileLogger.write(e);
+            
+            console.log(e);
         }
     }
 };

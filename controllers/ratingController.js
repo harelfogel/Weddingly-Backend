@@ -14,7 +14,8 @@ exports.ratingController = {
                 .then(function (response, err) {
                     try {
                         if (response && (req.params.id)) {
-                            res.json({ rating: `${response.data.result["rating"]}` });
+                            const totalRatingGrade=(0.009*response.data.result["user_ratings_total"])+(response.data.result["rating"]*6);
+                            res.json({ rating: `${totalRatingGrade}`});
                         }
                         else{
                             throw err;
