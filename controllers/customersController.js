@@ -49,7 +49,6 @@ exports.customersController = {
             })
     },
     getCustomerAppoitment(req, res) {
-        console.log(req.params.cid)
         if (req.params.cid) {
             UserModel.findById(req.params.cid).select({ appointment: 1 })
                 .then(appoitment => {
